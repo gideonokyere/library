@@ -1,0 +1,20 @@
+{
+  "name": "erc20",
+  "version": "1.0.0",
+  "description": "Implementation of the ERC20 token standard",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ERC20",
+    "token",
+    "IERC20",
+    "interface"
+  ],
+  "author": "gideonokyere",
+  "license": "ISC",
+  "devDependencies": {
+    "hardhat": "^2.19.4"
+  }
+}
