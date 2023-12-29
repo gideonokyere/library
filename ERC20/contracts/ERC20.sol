@@ -7,8 +7,9 @@ contract ERC20 is IERC20 {
 
   string private _name;
   string private _symbol;
-  uint private _decimals;
+  uint private constant _decimals = 18;
   uint256 private _totalSupply;
+  address public owner;
 
   event Transfer(address indexed _from, address indexed _to, uint256 amount);
   event Approve(address indexed _owner, address indexed _spender, uint256 amount);
@@ -18,6 +19,14 @@ contract ERC20 is IERC20 {
 
   // Keeps tracks of tokens and account is allowed to spend on behave on another account
   mapping (address => mapping (address => uint)) _allowances;
+
+  constructor(string memory name_, string memory symbol_, uint256 initialSupply_){
+    owner = msg.sender;
+    _name = name_;
+    _symbol = symbol_;
+    _totalSupply = initialSupply_ ** _decimals;
+    _mint(owner,initialSupply_);
+  }
 
   /** returns the name of the token */
   function name() public virtual view returns (string memory) {
@@ -39,8 +48,8 @@ contract ERC20 is IERC20 {
   }
 
   /*** Get the balance of tokens an account is allowed to spend on behave of another account */
-  function allowance(address owner, address spender) public virtual view returns (uint256) {
-    return _allowances[owner][spender];
+  function allowance(address _owner, address spender) public virtual view returns (uint256) {
+    return _allowances[_owner][spender];
   }
 
   /**
@@ -68,8 +77,8 @@ contract ERC20 is IERC20 {
 
   
   function approve (address spender, uint256 amount) external virtual returns (bool){
-    address owner = msg.sender;
-    _approve(owner,spender,amount);
+    address _owner = msg.sender;
+    _approve(_owner,spender,amount);
     return true;
   }
 
@@ -78,9 +87,9 @@ contract ERC20 is IERC20 {
    * address owner - Owner of the contract
    * uint256 initialSupply - the total supply of token during contract creation
    */
-  function _mint(address owner,uint256 initialSupply) external virtual {
+  function _mint(address _owner,uint256 initialSupply) internal virtual {
     require(owner != address(0) && msg.sender == owner,"Zero address not allowed");
-    _balances[owner]+=initialSupply;
+    _balances[_owner]+=initialSupply;
     _totalSupply+=initialSupply;
   }
 
@@ -107,9 +116,9 @@ contract ERC20 is IERC20 {
    /**
     * @dev checks for zero address from both owner and spender. It's also emit the Aprove event
     */
-  function _approve(address owner, address spender, uint256 amount) internal {
+  function _approve(address _owner, address spender, uint256 amount) internal {
     require(owner != address(0) && spender != address(0));
-    _allowances[owner][spender]+=amount;
-    emit Approve(owner,spender,amount);
+    _allowances[_owner][spender]+=amount;
+    emit Approve(_owner,spender,amount);
   }
 }
