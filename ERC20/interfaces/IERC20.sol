@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: SEE LICENSE IN LICENSE
+pragma solidity 0.8.20;
+
 interface IERC20 {
   /** The total number of tokens in circulations */
   function totalSupply() external view returns (uint256);
@@ -17,9 +20,9 @@ interface IERC20 {
   /** Get the total token approved account can spent */
   function allowance(address owner, address spender) external view returns (uint256);
 
-/** Emit when a transfer is made */
-  Event Transfer(address indexed _from, address indexed _to, uint256 amount);
+// /** Emit when a transfer is made */
+//   event Transfer(address indexed _from, address indexed _to, uint256 amount);
 
-  /**Emit when an account get approved */
-  Event Approve(address indexed _owner, address indexed _spender, uint256 amount);
+//   /**Emit when an account get approved */
+//   event Approve(address indexed _owner, address indexed _spender, uint256 amount);
 }
