@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: SEE LICENSE IN LICENSE
 pragma solidity 0.8.20;
 
-import '../interfaces/IERC20.sol';
+import "../interfaces/IERC20.sol";
+import "hardhat/console.sol";
 
 contract ERC20 is IERC20 {
 
   string private _name;
   string private _symbol;
-  uint private constant _decimals = 18;
   uint256 private _totalSupply;
   address public owner;
 
@@ -24,12 +24,12 @@ contract ERC20 is IERC20 {
     owner = msg.sender;
     _name = name_;
     _symbol = symbol_;
-    _totalSupply = initialSupply_ ** _decimals;
+    _totalSupply = initialSupply_;
     _mint(owner,initialSupply_);
   }
 
   /** returns the name of the token */
-  function name() public virtual view returns (string memory) {
+  function name() external virtual view returns (string memory) {
     return _name;
   }
 
@@ -47,6 +47,11 @@ contract ERC20 is IERC20 {
     return _totalSupply;
   }
 
+  /** Return token decimals */
+  function decimals() public virtual view returns (uint) {
+    return 18;
+  }
+
   /*** Get the balance of tokens an account is allowed to spend on behave of another account */
   function allowance(address _owner, address spender) public virtual view returns (uint256) {
     return _allowances[_owner][spender];
@@ -59,6 +64,7 @@ contract ERC20 is IERC20 {
    */
   function transfer(address recipient, uint256 amount) external virtual returns (bool) {
     address sender = msg.sender;
+    console.log(sender);
     _safeTransfer(sender,recipient,amount);
     return true;
   }
@@ -68,7 +74,7 @@ contract ERC20 is IERC20 {
     uint256 allowanceBalance = allowance(_from,spender);
     require(_from != address(0), "Can not transfer token to zero address");
     require(_to != address(0), "Can not transfer token to zero address");
-    require(allowanceBalance >= amount,'Insuficient funds');
+    require(allowanceBalance >= amount,"Insuficient funds");
     _allowances[_from][spender]-=amount;
     _balances[_to]+=amount;
     emit Transfer(_from,_to,amount);
@@ -117,7 +123,7 @@ contract ERC20 is IERC20 {
     * @dev checks for zero address from both owner and spender. It's also emit the Aprove event
     */
   function _approve(address _owner, address spender, uint256 amount) internal {
-    require(owner != address(0) && spender != address(0));
+    require(owner != address(0) && spender != address(0),"Can not set zero address to spend token");
     _allowances[_owner][spender]+=amount;
     emit Approve(_owner,spender,amount);
   }
