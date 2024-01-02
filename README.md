@@ -24,7 +24,7 @@ This contract has all the required methods be considered as ERC20 protocol.
  # How to use it in your project.
  
 
-    import "url to the contract file";
+    import "https://github.com/gideonokyere/library/blob/main/ERC20/contracts/ERC20.sol";
     contract MyToken is ERC20 {
        constractor(string _name, string _symbol) ERC20(_name,_symbol){};
        
